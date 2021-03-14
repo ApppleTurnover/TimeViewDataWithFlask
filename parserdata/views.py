@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 
-from parserdata import app, login_manager
+from parserdata import app, login_manager, db
 from parser import Parser
 from parserdata.models import User
 from parserdata.forms import LoginForm, RegistrationFrom
