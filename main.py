@@ -1,5 +1,4 @@
-from parse import Parser
+from parserdata import app, models, views
 
 if __name__ == '__main__':
-    parser = Parser(browser='safari', login='cv18213', password='zZemyx0pUW4r')
-    
+    app.run()

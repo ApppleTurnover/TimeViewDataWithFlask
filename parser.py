@@ -44,7 +44,7 @@ class Parser:
         driver.find_element_by_xpath("//input[@id='loginform-password']").send_keys(self.password)
         driver.find_element_by_xpath("//button[@name='login-button']").click()
 
-        for _ in range(5):
+        for _ in range(10):
             try:
                 uptime_data = driver.find_elements_by_xpath("//div[@id='up-time-info']//span")
                 fee_data = driver.find_element_by_xpath("//p[@class='cpS-h-XS']")
@@ -63,6 +63,7 @@ class Parser:
         remaining = {'days': re.findall(r'\d+', remaining_data.text)[0],
                      'before': re.findall(r'\(.*\)', remaining_data.text)[0][1:-1]}
 
+        driver.quit()
         return {
             'uptime': list(uptime),
             'uptime_percent': str(uptime_percent),

@@ -1,0 +1,15 @@
+{% include "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar %}
+    {% include "base/navbar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {% include "base/flash.html" %}
+
+        {{ wtf.quick_form(form) }}
+    </div>
+{% endblock %}

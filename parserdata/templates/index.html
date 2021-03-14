@@ -1,0 +1,31 @@
+{% include "bootstrap/base.html" %}
+
+{% block navbar %}
+    {% include 'base/navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        {% include "base/flash.html" %}
+        {% if current_user.is_authenticated %}
+            {% if parsed_data %}
+                <div class="alert alert-secondary">
+                    Сервер работает:
+                    {% for time in parsed_data['uptime'] %}
+                        {{ time }}
+                    {% endfor %}<br>
+
+                    Uptime: {{ parsed_data['uptime_percent'] }} <br>
+                    Арендная плата: {{ parsed_data['fee'] }} руб/м <br>
+                    Дней до конца аренды: {{ parsed_data['remaining']['days'] }} <br>
+                    День конца аренды: {{ parsed_data['remaining']['before'] }} <br>
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    The data has not been loaded yet, follow the <a href="{{ url_for('reload_data') }}">link</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
