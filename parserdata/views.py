@@ -6,7 +6,6 @@ from parser import Parser
 from parserdata.models import User
 from parserdata.forms import LoginForm, RegistrationFrom
 
-
 import os
 from dotenv import load_dotenv
 
@@ -15,7 +14,7 @@ load_dotenv()
 
 @app.route('/')
 def index():
-    return render_template('index.html', parsed_data=globals().get('parsed_data'))
+    return render_template('index.html', parsed_data=globals().get('parsed_data'), title='Data')
 
 
 @login_manager.user_loader
@@ -37,7 +36,7 @@ def login():
         else:
             flash('Invalid login or password specified.', "danger")
             return redirect(url_for('login'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, title='Login')
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -54,7 +53,7 @@ def registration():
         db.session.commit()
         flash('New account created', 'success')
         return redirect(url_for('index'))
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, title='Registration')
 
 
 @app.route('/logout')
@@ -69,7 +68,8 @@ def logout():
 def reload_data():
     if current_user.is_authenticated:
         global parsed_data
-        parser = Parser(browser='Safari', login=os.getenv('login'), password=os.getenv('password'))
+        parser = Parser()
+        parser.data = {'browser': 'Safari', 'login': os.getenv('login'), 'password': os.getenv('password')}
         parsed_data = parser.parse()
         flash('Success', 'success')
     else:
