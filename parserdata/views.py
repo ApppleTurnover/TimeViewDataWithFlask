@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
+from flask_sqlalchemy import sqlalchemy
 
 from parserdata import app, login_manager, db
 from parser import Parser
@@ -45,14 +46,18 @@ def registration():
 
     if form.validate_on_submit():
         if not form.login.data or not form.password.data:
-            flash('Data is incorrect')
+            flash('Login or Password is incorrect', 'danger')
+            return redirect(url_for('registration'))
+        try:
+            user = User(login=form.login.data, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('New account created', 'success')
+            return redirect(url_for('index'))
+        except sqlalchemy.exc.IntegrityError:
+            flash('Login already registered', 'danger')
             return redirect(url_for('registration'))
 
-        user = User(login=form.login.data, password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('New account created', 'success')
-        return redirect(url_for('index'))
     return render_template('register.html', form=form, title='Registration')
 
 
